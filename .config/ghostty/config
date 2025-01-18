@@ -1,0 +1,13 @@
+window-decoration = false
+theme = MaterialDarker
+
+# cursor options
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
+
+font-family = "JetBrainsMono Nerd Font"
+
+# disable default keybinds
+keybind = ctrl+enter=unbind
+
