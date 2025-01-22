@@ -1,0 +1,7 @@
+[init]
+	defaultBranch = master
+[diff]
+    external = difft
+[include]
+    path = ~/.gitconfig.local
+
