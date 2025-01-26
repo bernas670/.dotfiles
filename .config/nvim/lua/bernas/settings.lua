@@ -1,4 +1,5 @@
-vim.cmd.colorscheme("kanagawa-dragon")
+-- vim.cmd.colorscheme("kanagawa-dragon")
+vim.cmd.colorscheme("nordic")
 -- vim.cmd.colorscheme("citruszest")
 
 vim.opt.nu = true

@@ -30,5 +30,5 @@ bind -m vi-command -x '"yy": yank_line_to_clipboard'
 bind -m vi-command -x '"dd": kill_line_to_clipboard'
 
 # keep ctrl+l to clear terminal
-bind -m vi-insert "\C-l":clear-screen
+# bind -m vi-insert "\C-l":clear-screen
 
