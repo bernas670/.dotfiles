@@ -2,10 +2,16 @@ return {
 	"neovim/nvim-lspconfig",
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
-		"hrsh7th/cmp-nvim-lsp",
+		{ "hrsh7th/cmp-nvim-lsp" },
 		{ "antosha417/nvim-lsp-file-operations", config = true },
+		"williamboman/mason-lspconfig.nvim",
 	},
 	config = function()
+		local lsp_defaults = require("lspconfig").util.default_config
+
+		lsp_defaults.capabilities =
+			vim.tbl_deep_extend("force", lsp_defaults.capabilities, require("cmp_nvim_lsp").default_capabilities())
+
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 			callback = function(event)
@@ -31,26 +37,52 @@ return {
 			end,
 		})
 
-		local lspconfig = require("lspconfig")
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		-- local lspconfig = require("lspconfig")
+		-- local cmp_nvim_lsp = require("cmp_nvim_lsp")
+		-- local capabilities = vim.lsp.protocol.make_client_capabilities()
+		-- capabilities = vim.tbl_deep_extend("force", capabilities, cmp_nvim_lsp.default_capabilities())
 
-		local capabilities = vim.lsp.protocol.make_client_capabilities()
-		capabilities = vim.tbl_deep_extend("force", capabilities, cmp_nvim_lsp.default_capabilities())
-
-		lspconfig["lua_ls"].setup({
-			capabilities = capabilities,
-			settings = {
-				Lua = {
-					diagnostics = {
-						globals = { "vim" },
-					},
-					workspace = {
-						library = {
-							[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-							[vim.fn.stdpath("config") .. "/lua"] = true,
+		require("mason-lspconfig").setup({
+			ensure_installed = { "lua_ls" },
+			automatic_installation = true,
+			handlers = {
+				function(server_name)
+					require("lspconfig")[server_name].setup({
+						capabilities = lsp_defaults.capabilities,
+					})
+				end,
+				["lua_ls"] = function()
+					require("lspconfig")["lua_ls"].setup({
+						capabilities = lsp_defaults.capabilities,
+						settings = {
+							Lua = {
+								diagnostics = {
+									globals = { "vim" },
+								},
+								workspace = {
+									library = {
+										[vim.fn.expand("$VIMRUNTIME/lua")] = true,
+										[vim.fn.stdpath("config") .. "/lua"] = true,
+									},
+								},
+							},
 						},
-					},
-				},
+					})
+				end,
+				["pylsp"] = function()
+					require("lspconfig")["pylsp"].setup({
+						capabilities = lsp_defaults.capabilities,
+						settings = {
+							pylsp = {
+								plugins = {
+									pycodestyle = {
+										ignore = { "E501" },
+									},
+								},
+							},
+						},
+					})
+				end,
 			},
 		})
 	end,

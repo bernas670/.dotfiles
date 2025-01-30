@@ -1,11 +1,13 @@
 window-decoration = false
-theme = MaterialDarker
+# remove borders in gtk
+gtk-adwaita = false
+gtk-titlebar = false
 
 font-family = "JetBrainsMono Nerd Font"
+font-size = 14
+theme = "nordic"
 
 # disable default keybinds
 keybind = ctrl+enter=unbind
 keybind = ctrl+shift+e=unbind
-
-theme = "nordic"
 
